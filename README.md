@@ -1,5 +1,9 @@
 # AnalyzePackage
-A tiny webservice to submit individual packages to Phylum for analysis via HTTP
+A tiny webservice to submit individual packages to Phylum for analysis via HTTP.
+
+**Strictly for internal use only**
+
+Do not put this on the public Internet. This application does not use TLS.
 
 ## Overview
 AnalyzePackage listens on 0.0.0.0:3000/tcp for HTTP Get requests. 
