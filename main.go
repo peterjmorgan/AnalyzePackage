@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/peterjmorgan/go-phylum"
 	log "github.com/sirupsen/logrus"
@@ -11,7 +12,8 @@ import (
 )
 
 type AnalyzeClient struct {
-	Client *phylum.PhylumClient
+	Client    *phylum.PhylumClient
+	ProjectID *string
 }
 
 func (a *AnalyzeClient) SendErrorResponse(responseCode int, message string, writer *http.ResponseWriter) {
@@ -47,7 +49,7 @@ func (a *AnalyzeClient) AnalyzePackage(writer http.ResponseWriter, req *http.Req
 		Type:    phylum.PackageType(pkgEcosystem),
 	})
 
-	analyzeJobID, err := a.Client.AnalyzeParsedPackages(pkgEcosystem, "afd14d21-eac8-4618-ae83-49d816903bd3", &packages)
+	analyzeJobID, err := a.Client.AnalyzeParsedPackages(pkgEcosystem, *a.ProjectID, &packages)
 	if err != nil {
 		log.Errorf("AnalyzeParsedPackages failed: %v\n", err)
 		errorMessage := fmt.Sprintf("go-phylum: AnalyzeParsedPackages failed: %v\n", err)
@@ -79,7 +81,19 @@ func (a *AnalyzeClient) AnalyzePackage(writer http.ResponseWriter, req *http.Req
 }
 
 func main() {
-	a := &AnalyzeClient{Client: phylum.NewClient()}
+	projectID := flag.String("projectID", "", "Phylum Project ID")
+	flag.Parse()
+	if *projectID == "" {
+		fmt.Printf("Error: must provide a Phylum Project ID (GUID) with flag: -projectID=$PROJECTID\n")
+		fmt.Printf("Usage: AnalyzePackage -projectID=$PROJECTID\n")
+		return
+	}
+
+	a := &AnalyzeClient{
+		Client:    phylum.NewClient(),
+		ProjectID: projectID,
+	}
+
 	http.HandleFunc("/", a.AnalyzePackage)
 	log.Fatal(http.ListenAndServe("0.0.0.0:3000", nil))
 }
