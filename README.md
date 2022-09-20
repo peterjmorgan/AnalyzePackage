@@ -23,8 +23,12 @@ The `ecosystem` parameter can be any of Phylum's 5 supported package registries:
 
 ## Requirements
 * [Phylum CLI](https://github.com/phylum-dev/cli) installed and authenticated
+* A Phylum Project ID. This is easily created:
+  1. `phylum project create <project_name>` This will create a .phylum_project file in the current working directory
+  2. Extract the `id` field (a GUID) for the projectID: `cat .phylum_project | grep 'id' | cut -d' ' -f2`
+  3. Use the resulting GUID for the `-projectID` flag to the application.
 
 ## Quick start
 1. Clone this repository: `git clone https://github.com/peterjmorgan/AnalyzePackage`
-2. Build AnalyzePackage: `go build -o AnalyzePackage`
-3. Run AnalyzePackage: `./AnalyzePackage`
+2. Build AnalyzePackage: `go build`
+3. Run AnalyzePackage: `./AnalyzePackage -projectID=$PHYLUM_PROJECT_ID`
