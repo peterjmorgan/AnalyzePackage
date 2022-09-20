@@ -81,5 +81,5 @@ func (a *AnalyzeClient) AnalyzePackage(writer http.ResponseWriter, req *http.Req
 func main() {
 	a := &AnalyzeClient{Client: phylum.NewClient()}
 	http.HandleFunc("/", a.AnalyzePackage)
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe("0.0.0.0:3000", nil))
 }
