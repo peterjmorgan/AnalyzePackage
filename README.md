@@ -1,8 +1,14 @@
 # AnalyzePackage
-A tiny webservice to submit individual packages to Phylum for analysis via HTTP
+A tiny webservice to submit individual open-source packages to Phylum for analysis via HTTP. 
+
+If the package has already been analyzed by Phylum, the JSON response will be returned. If the package has not been analyzed by Phylum, it is submitted for analysis and a JSON response indicating an `incomplete` status is returned.
+
+**Strictly for internal use only**
+
+Do not put this on the public Internet. This application does not use TLS.
 
 ## Overview
-AnalyzePackage listens on 0.0.0.0:3000/tcp for HTTP Get requests. 
+AnalyzePackage listens on `0.0.0.0:3000/tcp` for HTTP Get requests. 
 
 To submit a package for analysis, the following `curl` command illustrates the required GET parameters:
 
